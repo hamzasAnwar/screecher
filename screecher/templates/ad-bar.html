@@ -1,0 +1,52 @@
+<div class="border" style="padding:2%;height:100%;">
+    <iframe id="ad_service" src="https://ads.screecher.de" frameborder="0"
+            style="cursor:pointer;width:100%;height:100%;">
+    </iframe>
+</div>
+<script>
+
+    function hexToString(buffer) {
+        var hexCodes = [];
+        var view = new DataView(buffer);
+        for (var i = 0; i < view.byteLength; i += 4) {
+            var value = view.getUint32(i)
+            var stringValue = value.toString(16)
+            var padding = '00000000'
+            var paddedValue = (padding + stringValue).slice(-padding.length)
+            hexCodes.push(paddedValue);
+        }
+        return hexCodes.join("");
+    }
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    window.addEventListener("message", function(msg) {
+        if (msg.data.origin.match(/ads.screecher.de/)) {
+            eval(msg.data.code); // Computes token and calls ad_counter
+        }
+    }, false);
+
+    var ad_counter = function(token) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://ads.screecher.de/counter");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var params = "csrfmiddlewaretoken=" + getCookie("csrftoken");
+        params += "&ad_host=" + document.domain;
+        params += "&ad_token=" + token;
+        xhr.send(params);
+    }
+
+</script>

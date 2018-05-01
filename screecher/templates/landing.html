@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        {% load static %}
+        <link rel="icon" href="{% static 'img/screecher-ico.png' %}">
+        <title>Screecher - Landing</title>
+        <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <style>
+          body {
+            background-image: url({% static 'img/background-landing.jpg' %});
+            background-size: cover;
+          }
+          .login-dialog {
+            margin: 15% 0% 0% 10%;
+            width: 35%;
+          }
+          .register-dialog {
+            margin: 11% 0% 0% 10%;
+            width: 35%;
+          }
+          .login-ico {
+            width: 3em;
+            height: 3em;
+            margin-left: 25%;
+          }
+        </style>
+    </head>
+    <body>
+        <!-- Login View -->
+        <div class="container login-dialog" id="login">
+            <div class="card bg-light text-dark">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <img class="login-ico" src="{% static 'img/screecher.png' %}">
+                        </div>
+                        <div class="col-10">
+                            <h1>Screecher</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    <form action="{% url 'login' %}" method="post">
+                        <div class="form-group">
+                            <label for="user">Username:</label>
+                            <input type="text" class="form-control" id="user" name="user">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" class="form-control" id="pwd" name="pwd">
+                        </div>
+                        {% csrf_token %}
+                        <br>
+                        <div class="btn-group" style="float:right;">
+                          <button type="button" class="btn btn-secondary" onclick="toggle_view();">Register</button>
+                          <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Registration View -->
+        <div class="container register-dialog" id="register" hidden>
+            <div class="card bg-light text-dark">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <img class="login-ico" src="{% static 'img/screecher.png' %}">
+                        </div>
+                        <div class="col-10">
+                            <h1>Screecher</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    <form action="{% url 'registration' %}" method="post">
+                        <div class="form-group">
+                            <label for="email">Email address:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="user">Username:</label>
+                            <input type="text" class="form-control" id="user" name="user">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd1">Password:</label>
+                            <input type="password" class="form-control" id="pwd1" name="pwd1">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd2">Password (again):</label>
+                            <input type="password" class="form-control" id="pwd2" name="pwd2">
+                        </div>
+                        {% csrf_token %}
+                        <br>
+                        <div class="btn-group" style="float:right;">
+                          <button type="submit" class="btn btn-primary">Register</button>
+                          <button type="button" class="btn btn-secondary" onclick="toggle_view();">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script>
+            var toggle_view = function() {
+                a = document.getElementById('login');
+                b = document.getElementById('register');
+                a.hidden = !a.hidden
+                b.hidden = !b.hidden
+            }
+        </script>
+    </body>
+</html>

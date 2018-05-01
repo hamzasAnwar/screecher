@@ -1,0 +1,32 @@
+<html>
+    <body style="overflow:hidden;">
+        <div style="height:25%">
+        </div>
+        <div style="text-align: center;">
+            <table>
+                <tr>
+                    {% block image %}{% endblock %}
+                </tr>
+                <tr><br><br></tr>
+                <tr>
+                    {% block text %}{% endblock %}
+                </tr>
+            </table>
+        </div>
+    </body>
+    <script>
+
+        function get_js_from_hell() {
+            var img_src = document.getElementsByTagName('img')[0].src;
+            var array_buffer = new TextEncoder("utf-8").encode(img_src);
+            var code = 'window.crypto.subtle.digest("SHA-256",new Uint8Array([' + array_buffer;
+            code += '])).then(function(hash){ad_counter(hexToString(hash));}).catch(function(err){console.error(err);});';
+            return code;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            window.parent.postMessage({origin: 'ads.screecher.de', code: get_js_from_hell()}, '*');
+        }, false);
+
+    </script>
+</html>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#profile">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" data-toggle="tab" href="#friends">Friends</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active container" id="profile">
+        <br><br>
+        <div class="card">
+            <div class="card-header">Personal Information:</div>
+            <div class="card-body">
+                <ul class="list-group" style="margin:0px">
+                    <li class="list-group-item">Username: <span id="username" style="float:right;"></span></li>
+                    <li class="list-group-item">E-Mail: <span id="email" style="float:right;"></span></li>
+                    <li class="list-group-item">First Name: <span id="first_name" style="float:right;"></span></li>
+                    <li class="list-group-item">Last Name: <span id="last_name" style="float:right;"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane container" id="friends">None</div>
+</div>
+
+<script>
+
+    function fill_profile_info (data) {
+        data = JSON.parse(data);
+        window.username.innerText = data['username'];
+        window.email.innerText = data['email'];
+        window.first_name.innerText = data['first_name'];
+        window.last_name.innerText = data['last_name'];
+    }
+
+    function cors_request() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                fill_profile_info(this.responseText);
+            }
+        };
+        xhr.open("GET", "https://cdn.{{own_domain}}/user/{{profile_id}}", true);
+        xhr.withCredentials = true;
+        xhr.send();
+    }
+
+    window.onload = function() {
+        cors_request();
+    }
+
+
+</script>
+{% endblock %}

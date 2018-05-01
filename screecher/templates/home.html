@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row d-flex justify-content-end">
+    <table class="float-right" style="width:100%;margin-top:-9px;">
+        <tr>
+            <td class="align-top" style="padding:8px">
+                <div style="margin-top:-24px;">
+                    <div class="card my-4">
+                        <h5 class="card-header">Leave a Screech:</h5>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'screech' %}">
+                                <div class="form-group">
+                                    <textarea id="screech_area" name="screech_area" class="form-control" rows="3"></textarea>
+                                </div>
+                                <button type="submit" style="float:right;" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div style="height:100%;">
+                        {% for s in screeches %}
+                        <div id="{{s.id}}" class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">{{s.user.username}}:</h4>
+                                <p class="card-text">{{s.content}}</p>
+                                <a href="#" class="card-link">ReScreech</a>
+                                <a href="#" class="card-link">Comment</a>
+                            </div>
+                        </div>
+                        <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+            <td id="ad_col" style="border-left: 1px solid #212529;width:200px;padding:8px">
+                {% include 'ad-bar.html'%}
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+
+    window.onload = function() {
+        x = document.getElementsByClassName("content-wrapper")[0].scrollHeight;
+        window.ad_col.style.height = (x*0.99) + "px";
+    }
+
+</script>
+{% endblock %}
