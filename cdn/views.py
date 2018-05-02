@@ -5,11 +5,13 @@ import json
 
 
 def user_info(request, profile_id):
+    if request.user.id != int(profile_id):
+        return HttpResponse("Wrong User ID: " + str(request.user.id))
     cursor = connections['default'].cursor()
     cursor.execute("SELECT first_name, last_name, username, email FROM screecher_userprofile WHERE user_id=%s", (profile_id,))
     user_profile = cursor.fetchone()
     if user_profile is None:
-        return HttpResponse('')
+        return HttpResponse('No such user ID!')
     first_name, last_name, username, email = user_profile
     data = {
         'first_name': first_name,

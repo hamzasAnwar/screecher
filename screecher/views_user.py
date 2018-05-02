@@ -34,13 +34,13 @@ def login_view(request):
     user = request.POST.get('user', None)
     pwd = request.POST.get('pwd', None)
     if user is None or pwd is None:
-        return return_status(401)
+        return return_status(418)
     user = authenticate(request=request, username=user, password=pwd)
     if user is not None and user.is_active:
         auth_login(request, user)
         return HttpResponseRedirect(reverse('index'))
     else:
-        return return_status(401)
+        return return_status(418)
 
 
 def logout_view(request):

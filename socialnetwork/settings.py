@@ -50,6 +50,8 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+SESSION_COOKIE_DOMAIN = "team8.screecher.de"
+
 MIDDLEWARE = [
     'screecher.multihost.MultiHostMiddleware',
     'django.middleware.security.SecurityMiddleware',
