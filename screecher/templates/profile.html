@@ -45,7 +45,7 @@
                 fill_profile_info(this.responseText);
             }
         };
-        xhr.open("GET", "https://cdn.{{own_domain}}/user/{{profile_id}}", true);
+        xhr.open("GET", "https://cdn.{{own_domain}}/user/", true);
         xhr.withCredentials = true;
         xhr.send();
     }
