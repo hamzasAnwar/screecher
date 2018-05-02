@@ -6,7 +6,7 @@ import json
 
 def user_info(request, profile_id):
     cursor = connections['default'].cursor()
-    cursor.execute("SELECT first_name, last_name, username, email FROM screecher_userprofile WHERE id=%s", (profile_id,))
+    cursor.execute("SELECT first_name, last_name, username, email FROM screecher_userprofile WHERE user_id=%s", (profile_id,))
     user_profile = cursor.fetchone()
     if user_profile is None:
         return HttpResponse('')
