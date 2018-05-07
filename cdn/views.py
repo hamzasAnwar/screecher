@@ -4,15 +4,17 @@ from django.db import connections
 import json
 
 def is_allowed_origin(http_origin, http_host):
+
+    # allow access if proxy nullifies the header for privacy reasons
+    if http_origin == 'null':
+        return False
+
     # allow www.teamX access
     if http_origin:
         # strip SSL
         http_origin = http_origin.replace("https://", "")
         if http_origin.startswith("www.team") and http_origin.replace("www.", "cdn.") == http_host:
             return True
-    # allow access if proxy nullifies the header for privacy reasons
-    if http_origin == 'null':
-        return True
     return False
 
 
@@ -37,7 +39,7 @@ def user_info(request):
     response['Access-Control-Max-Age'] = 42
     if is_allowed_origin(request.META.get('HTTP_ORIGIN'), request.META.get('HTTP_HOST')):
         response['Access-Control-Allow-Origin'] = request.META.get('HTTP_ORIGIN')
-    response['Access-Control-Allow-Credentials'] = 'true'
+        response['Access-Control-Allow-Credentials'] = 'true'
     return response
 
 
