@@ -29,13 +29,14 @@ ALLOWED_HOSTS = ['*']
 
 HOST_MIDDLEWARE_URLCONF_MAP = {
     'ads': 'advertisement.urls',
-    'www': 'screecher.urls',
+    'www': 'settings.urls',
     'cdn': 'cdn.urls',
 }
 
 # Application definition
 
 INSTALLED_APPS = [
+    'settings',
     'cdn',
     'screecher',
     'advertisement',

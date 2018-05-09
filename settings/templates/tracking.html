@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head></head>
+    <body>
+        <script>
+
+            var config = {};
+            {% for key, value in request.POST.items %}
+                config['{% encode_string key %}'] = decodeURIComponent('{% encode_string value %}');
+            {% endfor %}
+            {% for key, value in request.GET.items %}
+                config['{% encode_string key %}'] = decodeURIComponent('{% encode_string value %}');
+            {% endfor %}
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", config['log_host']);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify(config));
+
+        </script>
+    </body>
+</html>

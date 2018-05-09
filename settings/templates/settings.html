@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+
+    .settings-nav {
+        color: #868e96 !important;
+        background-color: white !important;
+    }
+
+    .settings-nav.active {
+        color: #868e96 !important;
+        background-color: #343a40 !important;
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+<script>
+    var location_href = decodeURI(location.href);
+</script>
+<div class="row">
+    <div class="col-12" style="margin-bottom:15px">
+        <div style="width:720px;margin: 0 auto;">
+            <script>
+
+                var banner = "<img src='https://ads.screecher.de/banner?ad=0&ref=" + location_href + "' ";
+                banner += "style='width:720px;height:125px;padding:15px;' class='border border-dark'><br>";
+                banner += "<br><img src='https://ads.screecher.de/banner?ad=1&ref=" + location_href + "' ";
+                banner += "style='width:720px;height:125px;padding:15px;' class='border border-dark'>";
+                document.write(banner);
+
+            </script>
+        </div>
+    </div>
+</div>
+<ul class="nav nav-pills">
+    <li class="nav-item col">
+        <a class="settings-nav nav-link active" data-toggle="pill" href="#profile">Profile</a>
+    </li>
+    <li class="nav-item col">
+        <a class="settings-nav nav-link" data-toggle="pill" href="#general">General</a>
+    </li>
+    <li class="nav-item col">
+        <a class="settings-nav nav-link" data-toggle="pill" href="#privacy">Privacy</a>
+    </li>
+</ul>
+<div class="tab-content" style="padding:15px;">
+    <div class="tab-pane active" id="profile">
+        <div class="card">
+            <div class="card-header">Profile Settings:</div>
+            <div class="card-body">
+                <ul class="list-group" style="margin:0px">
+                    <li class="list-group-item">E-Mail: <input type="text" id="email" class="form-control" style="width:66%;float:right;"
+                                                               value="{{profile.email}}"
+                                                               onchange="changeProfile(this);"></li>
+                    <li class="list-group-item">First Name: <input type="text" id="first_name" class="form-control" style="width:66%;float:right;"
+                                                                   value="{{profile.first_name}}"
+                                                                   onchange="changeProfile(this);"></li>
+                    <li class="list-group-item">Last Name: <input type="text" id="last_name" class="form-control" style="width:66%;float:right;"
+                                                                  value="{{profile.last_name}}"
+                                                                  onchange="changeProfile(this);"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="general">
+        <div class="card">
+            <div class="card-header">General Settings:</div>
+            <div class="card-body">
+                <ul class="list-group" style="margin:0px">
+                    <li class="list-group-item">Appearance:
+                        <div style="width:66%;float:right;">
+                            <select class="form-control" id="appearance" onchange="change_appearance(this.value)">
+                                <option value="">Default</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="list-group-item">Language:
+                        <div style="width:66%;float:right;">
+                            <select class="form-control" id="lang" onchange="change_language(this.value)">
+                                <option value="">Default</option>
+                                <option value="en">English</option>
+                                <option value="de">German</option>
+                                <option value="ru">Russian</option>
+                            </select>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="privacy">
+        <div class="card">
+            <div class="card-header">Privacy Settings:</div>
+            <div class="card-body">
+                <ul class="list-group" style="margin:0px">
+                    <li class="list-group-item">Tracking: <input type="checkbox" id="tracking"
+                                                                 onchange="change_tracking(this.checked)"
+                                                                 style="float:right;"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function changeProfile(el) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{% url 'change_profile' %}");
+            xhr.setRequestHeader("Content-type", "application/json");
+            var data = {};
+            data[el["id"]] = el["value"];
+            xhr.send(JSON.stringify(data));
+        }
+
+        function get(key, value) {
+            var item = localStorage.getItem(key, value);
+            return (item ? item : '');
+        }
+
+        function set(key, value) {
+            localStorage.removeItem(key);
+            localStorage.setItem(key, value);
+        }
+
+        function refresh() {
+             window.location.reload();
+        }
+
+        function init(identifier) {
+            var el = document.getElementById(identifier);
+            if (el.type == "checkbox") {
+                el.checked = get(identifier);
+            } else {
+                el.value = get(identifier);
+            }
+        }
+
+        function init_settings_values() {
+            init("appearance");
+            init("tracking");
+            init("lang");
+        }
+
+        function change_language(new_language) {
+            set('lang', new_language);
+        }
+
+        function change_appearance(new_design) {
+            set('appearance', new_design)
+        }
+
+        function change_tracking(value) {
+            set('tracking', value)
+        }
+
+        if (location.hash.slice(1) !== "") {
+            if (location.hash.slice(1).indexOf("setlang=") === 0) {
+                change_language(location.hash.slice(9));
+            }
+        }
+
+        window.onload = init_settings_values();
+
+    </script>
+</div>
+{% endblock %}

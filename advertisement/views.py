@@ -1,12 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf import settings
 
 from .models import Advertisement
+
 import random
 import hashlib
 import json
 
 ads_templates = ['snow-owl.html', 'feathers.html', 'lootbox.html', 'ads.html']
+banner_templates = ['1.png', '2.png']
 
 
 def return_status(status):
@@ -49,4 +52,22 @@ def ad_count(request):
     else:
         return return_status(401)
 
+
+def banner(request):
+    ad_host = request.GET.get("ref")
+    img_num = request.GET.get("ad")
+    if ad_host is None or img_num is None:
+        return return_status(418)
+    host_hash = hashlib.sha256(ad_host.encode('utf-8')).hexdigest()
+    img = banner_templates[int(img_num)]
+    token = hashlib.md5(img.encode('utf-8')).hexdigest()
+    try:
+        ad = Advertisement.objects.get(token=token, host=host_hash)
+        ad.loaded = ad.loaded + 1
+    except Advertisement.DoesNotExist:
+        ad = Advertisement.objects.create(token=token, host=host_hash, loaded=1)
+    ad.save()
+    img_path = settings.BASE_DIR + "/advertisement/static/img/banners/" + img
+    img_data = open(img_path, "rb").read()
+    return HttpResponse(img_data, content_type="image/png")
 

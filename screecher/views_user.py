@@ -16,6 +16,9 @@ def registration(request):
     username = request.POST.get('user', None)
     password = request.POST.get('pwd1', None)
     email = request.POST.get('email', None)
+    if User.objects.filter(username=username):
+        # username already taken
+        return HttpResponseRedirect(reverse('index'))
     user = User.objects.create_user(username=username, password=password)
     if user is not None:
         user.save()
