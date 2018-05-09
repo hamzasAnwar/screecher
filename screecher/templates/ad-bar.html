@@ -34,7 +34,7 @@
     }
 
     window.addEventListener("message", function(msg) {
-        if (msg.data.origin.match(/ads.screecher.de/)) {
+        if (msg.origin == "https://ads.screecher.de") {
             eval(msg.data.code); // Computes token and calls ad_counter
         }
     }, false);
