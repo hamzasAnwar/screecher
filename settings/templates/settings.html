@@ -23,11 +23,20 @@
         <div style="width:720px;margin: 0 auto;">
             <script>
 
-                var banner = "<img src='https://ads.screecher.de/banner?ad=0&ref=" + location_href + "' ";
-                banner += "style='width:720px;height:125px;padding:15px;' class='border border-dark'><br>";
-                banner += "<br><img src='https://ads.screecher.de/banner?ad=1&ref=" + location_href + "' ";
-                banner += "style='width:720px;height:125px;padding:15px;' class='border border-dark'>";
-                document.write(banner);
+                var ad1 = document.createElement("img");
+                ad1.src = "https://ads.screecher.de/banner?ad=0&ref=" + location_href;
+                ad1.style = "width:720px;height:125px;padding:15px;";
+                ad1.class = "border border-dark";
+                var ad2 = document.createElement("img");
+                ad2.src = "https://ads.screecher.de/banner?ad=1&ref=" + location_href;
+                ad2.style = "width:720px;height:125px;padding:15px;";
+                ad2.class = "border border-dark";
+
+                document.body.appendChild(ad1);
+                document.body.appendChild("<br>");
+                document.body.appendChild(ad2);
+
+
 
             </script>
         </div>
