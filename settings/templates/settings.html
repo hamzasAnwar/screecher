@@ -164,7 +164,10 @@
 
         if (location.hash.slice(1) !== "") {
             if (location.hash.slice(1).indexOf("setlang=") === 0) {
-                change_language(location.hash.slice(9));
+                var lang = location.hash.slice(9);
+                if(["","en","ru","de"].includes(lang)){
+                    change_language(lang);
+                }
             }
         }
 
