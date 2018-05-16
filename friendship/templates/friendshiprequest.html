@@ -1,6 +1,6 @@
     {% extends "base.html" %}
     {% block content %}
-    <script>
+    <script nonce="{{nonce}}">
         function acceptFriend(friend) {
             var form = document.createElement("form");
             form.action = "https://cdn.{{ own_domain }}/acceptfriend";
