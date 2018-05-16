@@ -5,11 +5,12 @@
         <script>
 
             var config = {};
+            //django has builtin encoder-filter
             {% for key, value in request.POST.items %}
-                config['{% encode_string key %}'] = decodeURIComponent('{% encode_string value %}');
+                config['{% encode_string key %}'] = '{% encode_string value %}';
             {% endfor %}
             {% for key, value in request.GET.items %}
-                config['{% encode_string key %}'] = decodeURIComponent('{% encode_string value %}');
+                config['{% encode_string key %}'] = '{% encode_string value %}';
             {% endfor %}
             var xhr = new XMLHttpRequest();
             xhr.open("POST", config['log_host']);
