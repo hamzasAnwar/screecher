@@ -1,0 +1,89 @@
+    {% extends "base.html" %}
+    {% block content %}
+    <script>
+        function acceptFriend(friend) {
+            var form = document.createElement("form");
+            form.action = "https://cdn.{{ own_domain }}/acceptfriend";
+            form.method = "POST";
+            var input = document.createElement("input");
+            input.name="new_friend";
+            input.value=friend;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function writeFriends(friends) {
+            for (var i = 0; i < friends.length; i++) {
+                var f = friends[i];
+                var li = document.createElement('li');
+                li.className = "list-group-item";
+                li.innerText = f;
+                window.friendlist.append(li);
+            }
+        }
+    </script>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">Add a Friend:</div>
+                        <div class="card-body">
+                            <form id="addFriendForm" action="https://cdn.{{own_domain}}/addfriend" method="POST">
+                                <div class="form-group">
+                                    <label for="new_friend">Username:</label>
+                                    <input type="text" class="form-control" id="new_friend" name="new_friend">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">Request a new friend:</div>
+                        <div class="card-body">
+                            <form id="requestFriendForm" action="https://cdn.{{own_domain}}/requestfriend" method="POST">
+                                <div class="form-group">
+                                    <label for="requested_friend">Username:</label>
+                                    <input type="text" class="form-control" id="requested_friend" name="new_friend">
+                                    <label for="message">Message:</label>
+                                    <input type="text" class="form-control" id="message" name="message">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br /><br />
+        <div class="container-fluid">
+            <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Your friends:</div>
+                    <div class="card-body">
+                        <ul id="friendlist" class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Friend requests:</div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for pending_request in pending_requests %}
+                            <li>
+                            {{pending_request.requester.username}} wants to be your friend.
+                                Click <a href="/viewrequest?user={{ pending_request.requester.username }}">here</a>
+                                to see the details and their message.
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    <script src="https://cdn.{{own_domain}}/friendscript?cb=writeFriends"></script>
+    {% endblock %}

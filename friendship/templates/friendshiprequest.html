@@ -1,0 +1,53 @@
+    {% extends "base.html" %}
+    {% block content %}
+    <script>
+        function acceptFriend(friend) {
+            var form = document.createElement("form");
+            form.action = "https://cdn.{{ own_domain }}/acceptfriend";
+            form.method = "POST";
+            var input = document.createElement("input");
+            input.name="new_friend";
+            input.value=friend;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function writeFriends(friends) {
+            for (var i = 0; i < friends.length; i++) {
+                var f = friends[i];
+                var li = document.createElement('li');
+                li.className = "list-group-item";
+                li.innerText = f;
+                window.friendlist.append(li);
+            }
+        }
+    </script>
+        <div class="container-fluid">
+            <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Friend requests:</div>
+                    <div class="card-body">
+                        {{fsr.requester.username}} wants to be your friend and sent this message: {{ fsr.message }}
+                        <br ><a href="#" id="accept-{{fsr.requester.username}}">Accept as friend</a>
+                        <script nonce="{{ nonce }}">
+                            document.getElementById("accept-{{fsr.requester.username}}").onclick = function() {
+                                acceptFriend('{{ fsr.requester.username }}');
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Your current friends:</div>
+                    <div class="card-body">
+                        <ul id="friendlist" class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    <script src="https://cdn.{{own_domain}}/friendscript?cb=writeFriends"></script>
+    {% endblock %}
