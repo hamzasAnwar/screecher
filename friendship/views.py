@@ -24,7 +24,6 @@ def friend_list(request):
     pending_requests = FriendshipRequest.objects.filter(requested=request.user)
     # dynamically generate a nonce
     csrftoken = base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
-
     request.session['csrftoken'] = csrftoken
     response = render(request, 'friends.html',
                       context={'own_domain': own_domain,
@@ -75,7 +74,6 @@ def view_friend_request(request):
                       context={'own_domain': own_domain,
                                'messages': messages.get_messages(request),
                                'fsr': fsr,
-                               'nonce': nonce,
-                               'ncsrftoken': nonce})
+                               'nonce': nonce})
     response["Content-Security-Policy"] = "script-src " + " ".join(allowed_sources)
     return response
