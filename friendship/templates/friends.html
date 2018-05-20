@@ -33,6 +33,8 @@
                                 <div class="form-group">
                                     <label for="new_friend">Username:</label>
                                     <input type="text" class="form-control" id="new_friend" name="new_friend">
+                                    <input type="hidden" value="{{csrftoken}}" id="csrftoken" name="csrftoken">
+
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add</button>
                             </form>
@@ -49,6 +51,8 @@
                                     <input type="text" class="form-control" id="requested_friend" name="new_friend">
                                     <label for="message">Message:</label>
                                     <input type="text" class="form-control" id="message" name="message">
+                                    <input type="hidden" value="{{ncsrftoken}}" id="ncsrftoken" name="ncsrftoken">
+
                                 </div>
                                 <button type="submit" class="btn btn-primary">Request</button>
                             </form>
