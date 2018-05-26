@@ -113,9 +113,13 @@ def add_friend(request):
 @login_required
 def friend_script(request):
     friendships = models.Friendship.objects.filter(user2=request.user)
-    friends = []
-    for f in friendships:
-        friends.append(f.user1.username)
-    return render(request, 'friend_script.js',
-                  context={'friends': friends, 'cb': mark_safe(request.GET.get("cb", "console.log"))},
-                  content_type="application/x-javascript")
+    session_token = request.session["friendtoken"]
+    url_token = request.GET.get("friendtoken")
+
+    if session_token == url_token:
+        friends = []
+        for f in friendships:
+            friends.append(f.user1.username)
+        return render(request, 'friend_script.js',
+                      context={'friends': friends, 'cb': mark_safe(request.GET.get("cb", "console.log"))},
+                      content_type="application/x-javascript")
