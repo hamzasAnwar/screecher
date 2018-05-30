@@ -80,10 +80,10 @@ def add_request_friend(request):
         messages.success(request, "Friendship requested updated")
         return HttpResponseRedirect(friends_page)
 
-
 @login_required
 def add_friend(request):
     to_friend = request.POST.get("new_friend")
+    csrftoken = request.POST.get("csrftoken")
 
     own_domain = '.'.join(request.META.get('HTTP_HOST').split('.')[1:])
     friends_page = "https://www." + own_domain + "/friends"
@@ -91,29 +91,35 @@ def add_friend(request):
     if to_friend is None:
         messages.warning(request, "No friend passed to endpoint")
         return HttpResponseRedirect(friends_page)
-    try:
-        new_friend = models.User.objects.get(username=to_friend)
-    except ObjectDoesNotExist:
-        messages.warning(request, "No such user")
+    if csrftoken == request.session['csrftoken']:
+        try:
+            new_friend = models.User.objects.get(username=to_friend)
+        except ObjectDoesNotExist:
+            messages.warning(request, "No such user")
+            return HttpResponseRedirect(friends_page)
+        if new_friend == request.user:
+            messages.warning(request, "Do you not have any real friends? Adding yourself is pointless")
+            return HttpResponseRedirect(friends_page)
+        try:
+            models.Friendship.objects.create(user1=request.user, user2=new_friend).save()
+        except Exception as e:
+            messages.warning(request, "Adding friend failed, duplicate? " + str(e))
+            return HttpResponseRedirect(friends_page)
+        messages.success(request, "Added %s as a friend" % (to_friend, ))
         return HttpResponseRedirect(friends_page)
-    if new_friend == request.user:
-        messages.warning(request, "Do you not have any real friends? Adding yourself is pointless")
-        return HttpResponseRedirect(friends_page)
-    try:
-        models.Friendship.objects.create(user1=request.user, user2=new_friend).save()
-    except Exception as e:
-        messages.warning(request, "Adding friend failed, duplicate? " + str(e))
-        return HttpResponseRedirect(friends_page)
-    messages.success(request, "Added %s as a friend" % (to_friend, ))
+    messages.warning(request,"Error :(")
     return HttpResponseRedirect(friends_page)
-
 
 @login_required
 def friend_script(request):
     friendships = models.Friendship.objects.filter(user2=request.user)
-    friends = []
-    for f in friendships:
-        friends.append(f.user1.username)
-    return render(request, 'friend_script.js',
-                  context={'friends': friends, 'cb': mark_safe(request.GET.get("cb", "console.log"))},
-                  content_type="application/x-javascript")
+    session_token = request.session["friendtoken"]
+    url_token = request.GET.get("friendtoken")
+
+    if session_token == url_token:
+        friends = []
+        for f in friendships:
+            friends.append(f.user1.username)
+        return render(request, 'friend_script.js',
+                      context={'friends': friends, 'cb': mark_safe(request.GET.get("cb", "console.log"))},
+                      content_type="application/x-javascript")

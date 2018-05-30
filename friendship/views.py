@@ -22,10 +22,17 @@ def generate_nonce(length=8):
 def friend_list(request):
     own_domain = '.'.join(request.META.get('HTTP_HOST').split('.')[1:])
     pending_requests = FriendshipRequest.objects.filter(requested=request.user)
+    # dynamically generate a nonce
+    csrftoken = base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
+    friendtoken =base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
+    request.session['csrftoken'] = csrftoken
+    request.session['friendtoken'] = friendtoken
     response = render(request, 'friends.html',
                       context={'own_domain': own_domain,
                                'messages': messages.get_messages(request),
-                               'pending_requests': pending_requests})
+                               'pending_requests': pending_requests,
+                               'csrftoken': csrftoken,
+                               'friendtoken': friendtoken})
     return response
 
 
@@ -54,6 +61,10 @@ def view_friend_request(request):
 
     # dynamically generate a nonce
     nonce = base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
+    friendtoken = base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
+    csrftoken= base64.b64encode(generate_nonce(8).encode("utf-8")).decode("utf-8")
+    request.session['friendtoken'] = friendtoken
+    request.session['csrftoken'] = csrftoken
 
     allowed_sources = ["'self'",
                        "'sha256-I+x1DjCE8PdmvoLRVq88w0XijGbAptyttYCK8Rv+dZw='",  # friendship functions
@@ -70,6 +81,8 @@ def view_friend_request(request):
                       context={'own_domain': own_domain,
                                'messages': messages.get_messages(request),
                                'fsr': fsr,
-                               'nonce': nonce})
+                               'nonce': nonce,
+                               'friendtoken':friendtoken,
+                               'csrftoken':csrftoken})
     response["Content-Security-Policy"] = "script-src " + " ".join(allowed_sources)
     return response
