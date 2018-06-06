@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="tab-content" style="padding:15px;padding-left:25px;width:50%">
+        <div class="tab-pane active">
+            <div class="card">
+                <div class="card-header">Feedback Panel:</div>
+                <div class="card-body">
+                    <form onsubmit="submitFeedback(window.feedback.value)">
+                        <div class="form-group">
+                            <label for="feedback">Your Feedback for the screecher Team:</label>
+                            <input type="text" class="form-control" id="feedback">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function submitFeedback(content) {
+        url = "{% url 'save_feedback' %}";
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.onload = function () {
+            if (xhr.readyState === xhr.DONE && xhr.status === 200) {
+                console.log(xhr.response);
+                console.log(xhr.responseText);
+            }
+        };
+        var data = new FormData();
+        data.append("comment", content);
+        data.append("user", {{user}});
+        xhr.send(data);
+    }
+
+</script>
+{% endblock %}

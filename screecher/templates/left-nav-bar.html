@@ -13,12 +13,14 @@
         </a>
     </li>
     -->
+    {% if request.user.is_authenticated %}
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Profile">
         <a class="nav-link" href="{% url 'profile' request.user.id %}">
             <i class="fa fa-fw fa-user"></i>
             <span class="nav-link-text">Profile</span>
         </a>
     </li>
+    {% endif %}
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Owl Swarm">
         <a class="nav-link" href="{% url 'friend_list' %}">
             <i class="fa fa-fw fa-users"></i>
@@ -44,25 +46,27 @@
             <span class="nav-link-text">OwlTube</span>
         </a>
     </li>
+    -->
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Premium">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'premium' %}">
             <i class="fa fa-fw fa-diamond"></i>
             <span class="nav-link-text">Premium</span>
         </a>
     </li>
+    <!--
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="OwlCash">
         <a class="nav-link" href="index.html">
             <i class="fa fa-fw fa-btc"></i>
             <span class="nav-link-text">OwlCash</span>
         </a>
     </li>
+    -->
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Feedback">
-        <a class=cd Fu  "nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'feedback' %}">
             <i class="fa fa-fw fa-commenting-o"></i>
             <span class="nav-link-text">Feedback</span>
         </a>
     </li>
-    -->
     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings">
         <a class="nav-link" href="{% url 'settings' %}">
             <i class="fa fa-fw fa-gear"></i>

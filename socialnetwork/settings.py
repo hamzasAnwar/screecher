@@ -29,13 +29,15 @@ ALLOWED_HOSTS = ['*']
 
 HOST_MIDDLEWARE_URLCONF_MAP = {
     'ads': 'advertisement.urls',
-    'www': 'friendship.urls',
+    'www': 'dbtests.urls',
     'cdn': 'friendcdn.urls',
 }
 
 # Application definition
 
 INSTALLED_APPS = [
+    'dbtests',
+    'premium',
     'friendship',
     'friendcdn',
     'settings',

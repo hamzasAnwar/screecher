@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% for p in search_profiles %}
+    <div class="row">
+        <div class="card" style="width:400px;margin:42px;padding:5px;">
+            <img class="card-img-top" src="{% static 'img/owl_profile.jpg' %}" alt="Profile Picture">
+            <div class="card-body">
+                <h4 class="card-title">{{p}}</h4>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
