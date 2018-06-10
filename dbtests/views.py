@@ -16,7 +16,7 @@ def profile_search(request):
     if username is None:
         return return_status(418)
     with connection.cursor() as cursor:
-        query = "SELECT username FROM auth_user WHERE auth_user.username='%s';"
+        query = "SELECT username FROM auth_user WHERE auth_user.username=%s;"
         cursor.execute(query % username)
         profile = cursor.fetchone()
         return render(request, 'search.html', context={'search_profiles': profile})
