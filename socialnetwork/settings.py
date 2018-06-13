@@ -29,13 +29,14 @@ ALLOWED_HOSTS = ['*']
 
 HOST_MIDDLEWARE_URLCONF_MAP = {
     'ads': 'advertisement.urls',
-    'www': 'dbtests.urls',
+    'www': 'owlcash.urls',
     'cdn': 'friendcdn.urls',
 }
 
 # Application definition
 
 INSTALLED_APPS = [
+    'owlcash',
     'dbtests',
     'premium',
     'friendship',

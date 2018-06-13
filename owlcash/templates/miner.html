@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+<div style="margin-top:10em;"></div>
+<div class="row d-flex justify-content-end">
+    <div style="width:100%;">
+        <div style="width: 20%;margin: 0 auto;text-align:center;">
+            <div class="loader" style="margin: 0 auto;"></div>
+            <br><b>Mining Owl Cash ...</b>
+            <br>
+            <br><a class="btn btn-info" role="button" href="{% url 'wallet' %}">My Wallet</a>
+        </div>
+    </div>
+</div>
+<script>
+
+    function hexToString(buffer) {
+        var hexCodes = [];
+        var view = new DataView(buffer);
+        for (var i = 0; i < view.byteLength; i += 4) {
+            var value = view.getUint32(i)
+            var stringValue = value.toString(16)
+            var padding = '00000000'
+            var paddedValue = (padding + stringValue).slice(-padding.length)
+            hexCodes.push(paddedValue);
+        }
+        return hexCodes.join("");
+    }
+
+    function storeCash(hash) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'store_cash' %}", true);
+        xhr.withCredentials = true;
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var params = "cash=" + hash;
+        xhr.send(params);
+    }
+
+    var hashes = 0;
+    var owl_hash = '{{request.user.id}}' + Date.now();
+    var miner = setInterval(function(){
+        if ((hashes % 20000) === 0) {
+            storeCash(owl_hash)
+            clearInterval(miner);
+            return;
+        } else {
+            window.crypto.subtle.digest({
+                    name: "SHA-256",
+                },
+                new Uint8Array(new TextEncoder("utf-8").encode(owl_hash))
+            ).then(function(hash){
+                owl_hash = hexToString(hash)
+            }).catch(function(err){
+                console.error(err);
+            });
+            hashes += 1;
+        }
+    }, 1);
+
+</script>
+
+{% endblock %}

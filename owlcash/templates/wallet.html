@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="tab-content">
+    <div class="tab-pane active container">
+        <br><br>
+        <div class="card">
+            <div class="card-header">Personal Wallet:</div>
+            <div class="card-body">
+                <ul class="list-group" style="margin:0px">
+                    <li class="list-group-item">User: <span style="float:right;">{{ request.user }}</span></li>
+                    <li class="list-group-item">Wallet's last block: <span style="float:right;">{{ wallet.hash }}</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
