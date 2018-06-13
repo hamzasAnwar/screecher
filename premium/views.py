@@ -13,7 +13,7 @@ def premium_area(request):
     access = request.POST.get('access', None)
     if access is None:
         return render(request, 'premium.html', context={'access': False})
-    search = 'function(){return (this.secret=="%s")}' % access
+    search = 'function(){return (this.secret==encodeURI("%s"))}' % access
     db = MongoClient('localhost', 27017).secrets
     auth = db.secret.find_one({'$where': search})
     if auth is None:

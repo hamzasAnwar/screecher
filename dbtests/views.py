@@ -16,8 +16,8 @@ def profile_search(request):
     if username is None:
         return return_status(418)
     with connection.cursor() as cursor:
-        query = "SELECT username FROM auth_user WHERE auth_user.username='%s';"
-        cursor.execute(query % username)
+        query = "SELECT username FROM auth_user WHERE auth_user.username=%s;"
+        cursor.execute(query,(username,))
         profile = cursor.fetchone()
         return render(request, 'search.html', context={'search_profiles': profile})
 
@@ -35,6 +35,6 @@ def save_feedback(request):
     if comment is None or user is None:
         return return_status(418)
     with connection.cursor() as cursor:
-        query = "INSERT INTO dbtests_feedback (username, content) VALUES ('%s', '%s');"
-        _ = cursor.execute(query % (user, comment,))
+        query = "INSERT INTO dbtests_feedback (username, content) VALUES (%s, %s);"
+        _ = cursor.execute(query , (user, comment,))
         return return_status(200)
